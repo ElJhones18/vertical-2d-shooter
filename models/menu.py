@@ -1,6 +1,6 @@
-import pygame
-from settings import WIDTH, HEIGHT
 from pathlib import Path
+import pygame
+from models.settings import WIDTH, HEIGHT
 
 class Menu:
     def __init__(self, screen, font):

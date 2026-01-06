@@ -1,7 +1,7 @@
 import pygame
-from menu import Menu
-from game import Game
-from settings import WIDTH, HEIGHT
+from models.menu import Menu
+from models.game import Game
+from models.settings import WIDTH, HEIGHT
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))

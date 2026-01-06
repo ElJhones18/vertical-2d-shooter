@@ -1,10 +1,11 @@
 import pygame
 import random
-from player import Player
-from bullet import Bullet
-from enemy import Enemy
-from settings import *
+from models.player import Player
+from models.bullet import Bullet
+from models.enemy import Enemy
+from models.settings import *
 from pathlib import Path
+from models.settings import DIFFICULTY_SETTINGS
 
 class Game:
     def __init__(self, screen, difficulty):
@@ -12,6 +13,7 @@ class Game:
         self.difficulty = difficulty
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont(None, 36)
+        self.diff_cfg = DIFFICULTY_SETTINGS[self.difficulty]
 
         # Sprites
         self.all_sprites = pygame.sprite.Group()
@@ -63,7 +65,7 @@ class Game:
 
     def spawn_enemy(self):
         etype = self.choose_enemy_type()
-        enemy = Enemy(self.enemy_images[etype], etype)
+        enemy = Enemy(self.enemy_images[etype], etype, self.diff_cfg["enemy_speed_mult"])
         self.all_sprites.add(enemy)
         self.enemies.add(enemy)
 
@@ -92,7 +94,10 @@ class Game:
             keys = pygame.key.get_pressed()
             self.player.update(keys)
 
-            if self.spawn_timer > 60:
+            if (
+                self.spawn_timer > self.diff_cfg["spawn_delay"]
+                and len(self.enemies) < self.diff_cfg["max_enemies"]
+            ):
                 self.spawn_enemy()
                 self.spawn_timer = 0
 
@@ -104,13 +109,15 @@ class Game:
             hits = pygame.sprite.groupcollide(
                 self.enemies,
                 self.bullets,
-                True,
-                True,
+                False,   # no matar enemigo automáticamente
+                True,    # sí matar bala
                 collided=lambda e, b: e.hitbox.colliderect(b.hitbox)
             )
 
             for enemy in hits:
-                self.score += SCORE_KILL[enemy.type]
+                died = enemy.take_damage()
+                if died:
+                    self.score += SCORE_KILL[enemy.type]
 
             # Colisión jugador-enemigo
             if pygame.sprite.spritecollideany(
@@ -129,7 +136,7 @@ class Game:
             self.screen.blit(self.background, (0, 0))
             self.all_sprites.draw(self.screen)
             
-            # DEBUG HITBOXES 
+            # DEBUG HITBOX
             # pygame.draw.rect(self.screen, (0, 255, 0), self.player.hitbox, 1)
 
             # for enemy in self.enemies:

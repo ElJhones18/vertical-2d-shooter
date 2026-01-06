@@ -1,5 +1,5 @@
 import pygame
-from settings import WIDTH, BULLET_SPEED
+from models.settings import WIDTH, BULLET_SPEED
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, image, x, y):

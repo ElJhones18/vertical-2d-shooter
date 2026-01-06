@@ -1,5 +1,5 @@
 import pygame
-from settings import HEIGHT, PLAYER_SPEED
+from models.settings import HEIGHT, PLAYER_SPEED
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, image):
