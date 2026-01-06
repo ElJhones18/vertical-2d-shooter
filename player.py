@@ -9,8 +9,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.left = 20
         self.rect.centery = HEIGHT // 2
 
+        self.hitbox = self.rect.inflate(-self.rect.width * 0.25, 1600)
+
     def update(self, keys):
         if keys[pygame.K_UP] and self.rect.top > 0:
             self.rect.y -= PLAYER_SPEED
         if keys[pygame.K_DOWN] and self.rect.bottom < HEIGHT:
             self.rect.y += PLAYER_SPEED
+
+        self.hitbox.center = self.rect.center

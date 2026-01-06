@@ -102,14 +102,22 @@ class Game:
 
             # Colisiones bala-enemigo
             hits = pygame.sprite.groupcollide(
-                self.enemies, self.bullets, True, True
+                self.enemies,
+                self.bullets,
+                True,
+                True,
+                collided=lambda e, b: e.hitbox.colliderect(b.hitbox)
             )
 
             for enemy in hits:
                 self.score += SCORE_KILL[enemy.type]
 
             # Colisión jugador-enemigo
-            if pygame.sprite.spritecollideany(self.player, self.enemies):
+            if pygame.sprite.spritecollideany(
+                self.player,
+                self.enemies,
+                collided=lambda p, e: p.hitbox.colliderect(e.hitbox)
+            ):
                 self.save_highscore()
                 return self.score, self.highscore
 
@@ -120,6 +128,15 @@ class Game:
             # Dibujo
             self.screen.blit(self.background, (0, 0))
             self.all_sprites.draw(self.screen)
+            
+            # DEBUG HITBOXES 
+            # pygame.draw.rect(self.screen, (0, 255, 0), self.player.hitbox, 1)
+
+            # for enemy in self.enemies:
+            #     pygame.draw.rect(self.screen, (255, 0, 0), enemy.hitbox, 1)
+
+            # for bullet in self.bullets:
+            #     pygame.draw.rect(self.screen, (0, 0, 255), bullet.hitbox, 1)
 
             score_txt = self.font.render(f"Score: {self.score}", True, (255, 255, 255))
             self.screen.blit(score_txt, (10, 10))

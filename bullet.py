@@ -7,7 +7,11 @@ class Bullet(pygame.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect(center=(x, y))
 
+        self.hitbox = self.rect.inflate(-90, -100)
+
     def update(self):
         self.rect.x += BULLET_SPEED
+        self.hitbox.center = self.rect.center
+
         if self.rect.left > WIDTH:
             self.kill()

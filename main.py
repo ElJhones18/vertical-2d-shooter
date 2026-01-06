@@ -12,6 +12,7 @@ font = pygame.font.SysFont(None, 48)
 def game_over(score, highscore):
     while True:
         screen.fill((0, 0, 0))
+
         t1 = font.render("GAME OVER", True, (255, 0, 0))
         t2 = font.render(f"Score: {score}", True, (255, 255, 255))
         t3 = font.render(f"Highscore: {highscore}", True, (255, 255, 255))
@@ -26,16 +27,20 @@ def game_over(score, highscore):
 
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                pygame.quit()
-                exit()
+                pygame.quit(); exit()
             if e.type == pygame.KEYDOWN and e.key == pygame.K_RETURN:
                 return
 
+menu = Menu(screen, font)
+
 while True:
-    menu = Menu(screen, font)
-    difficulty = menu.run()
+    choice = menu.main_menu()
 
-    game = Game(screen, difficulty)
-    score, highscore = game.run()
+    if choice == "JUGAR":
+        difficulty = menu.difficulty_menu()
+        game = Game(screen, difficulty)
+        score, highscore = game.run()
+        game_over(score, highscore)
 
-    game_over(score, highscore)
+    elif choice == "MEJOR PUNTAJE":
+        menu.highscore_screen()
