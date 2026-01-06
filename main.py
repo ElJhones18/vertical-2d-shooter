@@ -1,133 +1,41 @@
 import pygame
-import random
-import sys
+from menu import Menu
+from game import Game
+from settings import WIDTH, HEIGHT
 
-# Inicializar pygame
 pygame.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Shooter PyGame")
 
-# Configuración de ventana
-ANCHO = 800
-ALTO = 600
-VENTANA = pygame.display.set_mode((ANCHO, ALTO))
-pygame.display.set_caption("Juego PyGame")
+font = pygame.font.SysFont(None, 48)
 
-# Colores
-BLANCO = (255, 255, 255)
-ROJO = (255, 0, 0)
-NEGRO = (0, 0, 0)
-
-# Reloj
-clock = pygame.time.Clock()
-
-# Jugador
-jugador = pygame.Rect(380, 500, 40, 40)
-velocidad_jugador = 5
-
-# Enemigos
-enemigos = []
-velocidad_enemigo = 3
-
-# Fuente
-fuente = pygame.font.SysFont(None, 50)
-
-# ---------------- FUNCIONES ---------------- #
-
-def mostrar_texto(texto, x, y):
-    render = fuente.render(texto, True, BLANCO)
-    VENTANA.blit(render, (x, y))
-
-
-def crear_enemigo():
-    x = random.randint(0, ANCHO - 40)
-    enemigo = pygame.Rect(x, -40, 40, 40)
-    enemigos.append(enemigo)
-
-
-def mover_jugador(teclas):
-    if teclas[pygame.K_LEFT] and jugador.x > 0:
-        jugador.x -= velocidad_jugador
-    if teclas[pygame.K_RIGHT] and jugador.x < ANCHO - jugador.width:
-        jugador.x += velocidad_jugador
-
-
-def mover_enemigos():
-    for enemigo in enemigos:
-        enemigo.y += velocidad_enemigo
-
-
-def detectar_colisiones():
-    for enemigo in enemigos:
-        if jugador.colliderect(enemigo):
-            return True
-    return False
-
-
-def menu():
+def game_over(score, highscore):
     while True:
-        VENTANA.fill(NEGRO)
-        mostrar_texto("MI JUEGO", 300, 200)
-        mostrar_texto("Presiona ENTER para jugar", 200, 300)
-        pygame.display.flip()
+        screen.fill((0, 0, 0))
+        t1 = font.render("GAME OVER", True, (255, 0, 0))
+        t2 = font.render(f"Score: {score}", True, (255, 255, 255))
+        t3 = font.render(f"Highscore: {highscore}", True, (255, 255, 255))
+        t4 = font.render("ENTER - Menu", True, (200, 200, 200))
 
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_RETURN:
-                    return
-
-
-def game_over():
-    while True:
-        VENTANA.fill(NEGRO)
-        mostrar_texto("GAME OVER", 280, 250)
-        mostrar_texto("ESC para salir", 300, 320)
-        pygame.display.flip()
-
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-
-
-def juego():
-    enemigos.clear()
-    tiempo_spawn = 0
-
-    while True:
-        clock.tick(60)
-        VENTANA.fill(NEGRO)
-
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-        teclas = pygame.key.get_pressed()
-        mover_jugador(teclas)
-
-        tiempo_spawn += 1
-        if tiempo_spawn > 60:
-            crear_enemigo()
-            tiempo_spawn = 0
-
-        mover_enemigos()
-
-        if detectar_colisiones():
-            game_over()
-
-        pygame.draw.rect(VENTANA, BLANCO, jugador)
-        for enemigo in enemigos:
-            pygame.draw.rect(VENTANA, ROJO, enemigo)
+        screen.blit(t1, (WIDTH//2 - 100, 200))
+        screen.blit(t2, (WIDTH//2 - 100, 260))
+        screen.blit(t3, (WIDTH//2 - 100, 310))
+        screen.blit(t4, (WIDTH//2 - 150, 380))
 
         pygame.display.flip()
 
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if e.type == pygame.KEYDOWN and e.key == pygame.K_RETURN:
+                return
 
-# ---------------- PROGRAMA PRINCIPAL ---------------- #
-menu()
-juego()
+while True:
+    menu = Menu(screen, font)
+    difficulty = menu.run()
+
+    game = Game(screen, difficulty)
+    score, highscore = game.run()
+
+    game_over(score, highscore)
