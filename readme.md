@@ -104,24 +104,27 @@ Las colisiones se manejan mediante funciones personalizadas usando el parámetro
 
 ---
 
-
 ## Requisitos
 
-* Python 3.9 o superior
-* PyGame
+- Python 3.9 – 3.11 (recomendado)
+- pip actualizado
+- pygame
+
+> ⚠️ Nota: PyGame no es totalmente compatible con Python 3.12+ en Windows.
 
 ---
 
 ## Instalación y ejecución
 
-1. Instalar PyGame:
+1. Clonar el repositorio
+2. Crear el entorno virtual (python 3.11 recomendado)
+   `python -m venv .venv`
 
-<pre class="overflow-visible! px-0!" data-start="3166" data-end="3196"><div class="contain-inline-size rounded-2xl corner-superellipse/1.1 relative bg-token-sidebar-surface-primary"><div class="sticky top-[calc(--spacing(9)+var(--header-height))] @w-xl/main:top-9"><div class="absolute end-0 bottom-0 flex h-9 items-center pe-2"><div class="bg-token-bg-elevated-secondary text-token-text-secondary flex items-center gap-4 rounded-sm px-2 font-sans text-xs"></div></div></div><div class="overflow-y-auto p-4" dir="ltr"><code class="whitespace-pre! language-bash"><span><span>pip install pygame
-</span></span></code></div></div></pre>
+   `.venv\Scripts\activate`
+3. Instalar PyGame:
 
-2. Ejecutar el juego desde la carpeta raíz del proyecto:
-
-<pre class="overflow-visible! px-0!" data-start="3256" data-end="3282"><div class="contain-inline-size rounded-2xl corner-superellipse/1.1 relative bg-token-sidebar-surface-primary"><div class="sticky top-[calc(--spacing(9)+var(--header-height))] @w-xl/main:top-9"><div class="absolute end-0 bottom-0 flex h-9 items-center pe-2"><div class="bg-token-bg-elevated-secondary text-token-text-secondary flex items-center gap-4 rounded-sm px-2 font-sans text-xs"></div></div></div><div class="overflow-y-auto p-4" dir="ltr"><code class="whitespace-pre! language-bash"><span><span>python main.py</span></span></code></div></div></pre>
+   `pip install -r requirements.txt`
+4. Ejecutar el juego ejecutando el archivo ***main.py***
 
 ---
 
